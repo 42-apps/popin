@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PopIn — pop in on someone you love</title>
+<meta name="description" content="PopIn opens an instant, warm two-way video window to a family member's Mac — for keeping a gentle eye on someone who needs a little extra care.">
+<meta property="og:title" content="PopIn — pop in on someone you love">
+<meta property="og:description" content="An instant, warm video window to the people who need you near, even when you're far.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="icon.png">
+<style>
+  :root{
+    --indigo:#7366f2; --violet:#9e5af2; --pink:#f56bb8; --green:#4cd98c;
+    --bg:#0c0b1a; --bg2:#141229; --card:rgba(255,255,255,.045); --line:rgba(255,255,255,.09);
+    --ink:#f3f1fb; --mut:#a7a3c4; --mut2:#7d7aa0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",system-ui,sans-serif;
+    color:var(--ink); background:var(--bg); line-height:1.6; -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit}
+  .wrap{max-width:980px;margin:0 auto;padding:0 24px}
+
+  /* ambient glow */
+  body::before{
+    content:"";position:fixed;inset:0;z-index:-1;
+    background:
+      radial-gradient(60% 50% at 18% 0%, rgba(115,102,242,.28), transparent 60%),
+      radial-gradient(50% 45% at 92% 8%, rgba(245,107,184,.18), transparent 55%),
+      radial-gradient(70% 60% at 50% 110%, rgba(158,90,242,.16), transparent 60%),
+      var(--bg);
+  }
+
+  /* hero */
+  header{text-align:center;padding:84px 0 40px}
+  .appicon{width:120px;height:120px;border-radius:27px;box-shadow:0 24px 60px -18px rgba(115,102,242,.7), 0 0 0 1px rgba(255,255,255,.06);margin-bottom:26px}
+  h1{font-size:64px;font-weight:800;letter-spacing:-2px;line-height:1;
+     background:linear-gradient(120deg,#fff 10%,var(--violet) 60%,var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .tag{font-size:25px;font-weight:600;margin-top:18px;color:var(--ink)}
+  .sub{font-size:17px;color:var(--mut);max-width:560px;margin:16px auto 0}
+
+  /* download */
+  .dl{margin:34px 0 12px;display:inline-flex;flex-direction:column;align-items:center;gap:10px}
+  .btn{
+    display:inline-flex;align-items:center;gap:12px;text-decoration:none;
+    font-size:18px;font-weight:700;color:#fff;padding:17px 34px;border-radius:16px;
+    background:linear-gradient(120deg,var(--indigo),var(--violet) 55%,var(--pink));
+    box-shadow:0 16px 40px -12px rgba(158,90,242,.75);transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 22px 50px -12px rgba(158,90,242,.9)}
+  .btn svg{width:22px;height:22px}
+  .dl-buttons{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+  .beta{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;background:rgba(255,255,255,.22);padding:3px 8px;border-radius:8px;margin-left:2px}
+  .meta{font-size:13.5px;color:var(--mut2)}
+  .meta b{color:var(--mut)}
+  .browser-link{margin:6px 0 0;font-size:14px;color:var(--mut)}
+  .browser-link a{color:var(--violet);font-weight:600;text-decoration:none}
+  .browser-link a:hover{text-decoration:underline}
+  .browser-link .dim{color:var(--mut2);font-size:12.5px}
+
+  /* sections */
+  section{padding:46px 0}
+  h2{font-size:30px;font-weight:800;letter-spacing:-.5px;text-align:center}
+  .lead{text-align:center;color:var(--mut);max-width:600px;margin:12px auto 0;font-size:16.5px}
+
+  .grid{display:grid;gap:16px;margin-top:34px}
+  .steps{grid-template-columns:repeat(2,1fr)}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px 24px;
+    backdrop-filter:blur(6px);
+  }
+  .card .n{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:11px;
+    font-weight:800;font-size:15px;color:#fff;background:linear-gradient(135deg,var(--indigo),var(--pink));margin-bottom:14px}
+  .card h3{font-size:18px;font-weight:700;margin-bottom:6px}
+  .card p{color:var(--mut);font-size:15px}
+  .card .em{font-size:22px;margin-bottom:12px;display:block}
+
+  .setup{grid-template-columns:1fr}
+  .setup .card{display:flex;gap:16px;align-items:flex-start;padding:20px 22px}
+  .setup .dot{flex:0 0 auto;width:11px;height:11px;border-radius:50%;background:var(--green);margin-top:7px;box-shadow:0 0 12px var(--green)}
+  .setup h3{font-size:16.5px}
+
+  .note{margin-top:22px;text-align:center;color:var(--mut2);font-size:14.5px}
+  .note b{color:var(--violet)}
+
+  /* privacy band */
+  .band{background:linear-gradient(120deg,rgba(115,102,242,.12),rgba(245,107,184,.10));border:1px solid var(--line);border-radius:24px;padding:42px 34px;text-align:center;margin:20px 0}
+  .band h2{font-size:26px}
+  .band p{color:var(--mut);max-width:640px;margin:14px auto 0;font-size:16px}
+  .pills{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:24px}
+  .pill{font-size:13.5px;color:var(--ink);background:rgba(255,255,255,.06);border:1px solid var(--line);padding:8px 15px;border-radius:30px}
+
+  footer{text-align:center;padding:54px 0 70px;color:var(--mut2);font-size:14px}
+  footer .heart{color:var(--pink)}
+
+  @media(max-width:680px){
+    header{padding:60px 0 30px}
+    h1{font-size:48px} .tag{font-size:21px}
+    .steps{grid-template-columns:1fr}
+    h2{font-size:25px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <img class="appicon" src="icon.png" alt="PopIn">
+    <h1>PopIn</h1>
+    <p class="tag">Pop in on someone you love.</p>
+    <p class="sub">An instant, warm two-way video window to a family member's Mac — for keeping a gentle eye on someone who needs a little extra care. No ringing, no fuss. Just there, like leaning into the next room.</p>
+    <div class="dl">
+      <div class="dl-buttons">
+        <a class="btn" href="https://pub-40176d14fd3243348ccd3df106d58098.r2.dev/PopIn-latest.dmg" download>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.6l3.3-3.3 1.4 1.4L12 16.4l-4.7-4.7 1.4-1.4L12 13.6V3h0zM5 19h14v2H5z"/></svg>
+          Download for Mac
+        </a>
+        <a class="btn" href="https://pub-40176d14fd3243348ccd3df106d58098.r2.dev/PopIn-Setup-latest.exe" download>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5.4 10.4 4.4v7H3V5.4zM3 12.6h7.4v7L3 18.6v-6zM11.6 4.2 21 3v8.4h-9.4V4.2zM11.6 12.6H21V21l-9.4-1.3v-7.1z"/></svg>
+          Download for Windows <span class="beta">Beta</span>
+        </a>
+      </div>
+      <span class="meta">Mac: macOS 12+ · <b>Notarized</b> · <span id="ver">v1.2.63</span> &nbsp;•&nbsp; Windows 10/11: <b>Beta</b> · <span id="winver">v1.0.0</span></span>
+      <p class="browser-link">No Mac or PC? <a href="app/">Use it in your browser →</a> <span class="dim">(iPad too — sign in with Google)</span></p>
+      <p class="browser-link"><span class="dim">Windows beta is unsigned — if SmartScreen warns, click <b>More info → Run anyway</b>. Feedback welcome.</span></p>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>How it works</h2>
+    <p class="lead">From download to your first pop-in in about two minutes.</p>
+    <div class="grid steps">
+      <div class="card"><span class="n">1</span><h3>Install it</h3><p>Download, drag PopIn into your Applications folder, and open it. It's notarized by Apple, so it just opens.</p></div>
+      <div class="card"><span class="n">2</span><h3>Sign in with Google</h3><p>One tap — no new account, no new password. Your email is your identity.</p></div>
+      <div class="card"><span class="n">3</span><h3>Authorize family</h3><p>Add a trusted person's Google email. Only the people you authorize can ever pop in — and you can remove anyone in one click.</p></div>
+      <div class="card"><span class="n">4</span><h3>Pop in — or glance</h3><p>One click opens a warm, full-screen video window. Or <em>glance</em> first for a silent peek, just to see all's well.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Setting up the always-on Mac</h2>
+    <p class="lead">The Mac you'll be checking in on does best with a one-time setup so it's always ready — even after a restart. PopIn's built-in guide walks you through each step.</p>
+    <div class="grid setup">
+      <div class="card"><span class="dot"></span><div><h3>Allow Camera &amp; Microphone</h3><p>PopIn asks the first time you open it. One tap each, and pop-ins always connect.</p></div></div>
+      <div class="card"><span class="dot"></span><div><h3>Keep it awake &amp; reachable</h3><p>Turn on in Settings so the Mac stays online for a pop-in (keep it plugged in, lid open).</p></div></div>
+      <div class="card"><span class="dot"></span><div><h3>Open at login + auto-login</h3><p>So if it ever restarts, it comes right back on its own — no one has to be there to log in. (FileVault off.)</p></div></div>
+    </div>
+    <p class="note">New in the app: a <b>Setup Guide</b> that detects what's done and walks you through the rest. ✨</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="band">
+      <h2>Yours, and only yours</h2>
+      <p>Nobody can pop in unless you explicitly authorize their email — and you can revoke it instantly. Video is a direct, encrypted link between your Macs. PopIn is a care tool, made for families.</p>
+      <div class="pills">
+        <span class="pill">🔒 Explicit per-person consent</span>
+        <span class="pill">🎥 Direct, encrypted video</span>
+        <span class="pill">🍏 Notarized by Apple</span>
+        <span class="pill">🚫 No ads, no tracking</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Made with <span class="heart">♥</span> for families.<br>
+    © PopIn · <a href="https://pub-40176d14fd3243348ccd3df106d58098.r2.dev/PopIn-latest.dmg">Download</a>
+  </div>
+</footer>
+
+<script>
+  // Show the live published version if available.
+  fetch("https://pub-40176d14fd3243348ccd3df106d58098.r2.dev/latest.json?t="+Date.now())
+    .then(r=>r.json()).then(d=>{ if(d && d.version){ document.getElementById("ver").textContent = "v"+d.version; }})
+    .catch(()=>{});
+</script>
+</body>
+</html>

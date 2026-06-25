@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>PopIn</title>
+  <link rel="stylesheet" href="call.css" />
+</head>
+<body>
+  <video id="remote" autoplay playsinline></video>
+  <video id="local" autoplay playsinline muted></video>
+
+  <div id="overlay">
+    <div id="peer"></div>
+    <div id="state">Calling…</div>
+    <div id="diag" title="Connection diagnostics — share this if a call won't connect"></div>
+  </div>
+
+  <div id="stats" title="Live call stats"></div>
+
+  <!-- Camera switcher — appears when the person you're watching has more than one camera. -->
+  <div id="cams" hidden></div>
+
+  <!-- "Watch" panel: what's on their Mac (music / activity / room), pushed live during the call. -->
+  <aside id="panel" hidden>
+    <section class="psec">
+      <h4>🎵 Music</h4>
+      <div id="np" class="muted">Nothing playing</div>
+      <div class="mc">
+        <button data-mc="prev" title="Previous">⏮</button>
+        <button data-mc="playpause" title="Play / pause">⏯</button>
+        <button data-mc="next" title="Next">⏭</button>
+      </div>
+      <select id="playlists" title="Play a playlist"><option value="">Playlists…</option></select>
+    </section>
+    <section class="psec">
+      <h4>💻 Activity</h4>
+      <div id="activity" class="muted">—</div>
+    </section>
+    <section class="psec">
+      <h4>🔊 Room</h4>
+      <div id="noise" class="muted">—</div>
+    </section>
+  </aside>
+
+  <div id="controls">
+    <button id="mic" title="Mute your mic">Mic</button>
+    <button id="cam" title="Turn your camera off">Camera</button>
+    <button id="rec" title="Record this call">Record</button>
+    <button id="photo" title="Save a snapshot">Photo</button>
+    <button id="panelbtn" title="What's on their Mac">Panel</button>
+    <button id="statsbtn" title="Show call stats">Stats</button>
+    <button id="hangup" class="danger" title="Hang up">Hang up</button>
+  </div>
+
+  <script type="module" src="call.js"></script>
+</body>
+</html>
