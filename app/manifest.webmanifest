@@ -1,0 +1,13 @@
+{
+  "name": "PopIn",
+  "short_name": "PopIn",
+  "description": "Pop in on the people you love — instant two-way video.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#14121c",
+  "theme_color": "#14121c",
+  "icons": [
+    { "src": "icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

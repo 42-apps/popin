@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="PopIn" />
+  <meta name="theme-color" content="#14121c" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icon.png" />
+  <link rel="stylesheet" href="app.css" />
+  <title>PopIn</title>
+</head>
+<body>
+  <main>
+    <header>
+      <img src="icon.png" class="logo" alt="" />
+      <h1>PopIn</h1>
+      <button id="signout" class="link" hidden>Sign out</button>
+    </header>
+
+    <section id="signin-view" hidden>
+      <p class="tagline">Pop in on the people you love.</p>
+      <button id="signin" class="primary">Sign in with Google</button>
+      <p id="cfg" class="muted" hidden>Sign-in isn't set up yet — a Web OAuth client id is needed.</p>
+    </section>
+
+    <section id="list-view" hidden>
+      <p class="who">Signed in as <span id="me"></span></p>
+      <ul id="people"></ul>
+      <p id="empty" class="muted" hidden>
+        No one has authorized you yet. Ask them to add your Google email in their PopIn app.
+      </p>
+    </section>
+
+    <p id="status" class="muted"></p>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
